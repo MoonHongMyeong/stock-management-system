@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS platforms (
     sort_order INTEGER DEFAULT 0,         -- 메뉴 정렬 순서
     is_active INTEGER DEFAULT 1,          -- 메뉴 활성화 여부
     created_at TEXT DEFAULT (datetime('now')),  -- 생성일시
-    updated_at TEXT DEFAULT (datetime('now')),  -- 수정일시
+    updated_at TEXT DEFAULT (datetime('now'))   -- 수정일시
 );
 
 -- targets 테이블: 대상
@@ -104,12 +104,7 @@ CREATE TABLE IF NOT EXISTS rule_conditions (
     FOREIGN KEY (rule_id) REFERENCES rules(id),
     FOREIGN KEY (parent_condition_id) REFERENCES rule_conditions(id),
     FOREIGN KEY (target_id) REFERENCES targets(id),
-    FOREIGN KEY (target_status_id) REFERENCES target_statuses(id),
-    CONSTRAINT fk_target_status CHECK (
-        target_status_id IN (
-            SELECT id FROM target_statuses WHERE target_id = target_id
-        )
-    )
+    FOREIGN KEY (target_status_id) REFERENCES target_status(id)
 );
 
 -- rule_actions 테이블: conditions 만족 시 상태 변경 정보
@@ -123,12 +118,7 @@ CREATE TABLE IF NOT EXISTS rule_actions (
     updated_at TEXT DEFAULT (datetime('now')),
     FOREIGN KEY (rule_id) REFERENCES rules(id),
     FOREIGN KEY (target_id) REFERENCES targets(id),
-    FOREIGN KEY (target_status_id) REFERENCES target_statuses(id),
-    CONSTRAINT fk_target_status CHECK (
-        target_status_id IN (
-            SELECT id FROM target_statuses WHERE target_id = target_id
-        )
-    )
+    FOREIGN KEY (target_status_id) REFERENCES target_status(id)
 );
 
 -- product_history 테이블: 제품 필드 값 변경 이력
@@ -138,7 +128,7 @@ CREATE TABLE IF NOT EXISTS product_history (
     field_id INTEGER NOT NULL,            -- 필드 ID
     old_value TEXT,                       -- 변경 전 값
     new_value TEXT,                       -- 변경 후 값
-    created_at TEXT DEFAULT (datetime('now')),  -- 변경일시
+    created_at TEXT DEFAULT (datetime('now'))  -- 변경일시
 );
 
 -- rule_history 테이블: 규칙 기본 정보 변경 이력
@@ -148,7 +138,7 @@ CREATE TABLE IF NOT EXISTS rule_history (
     field_name TEXT NOT NULL,            -- 변경된 필드명 (name, description, is_active)
     old_value TEXT,                      -- 변경 전 값
     new_value TEXT,                      -- 변경 후 값
-    created_at TEXT DEFAULT (datetime('now')),  -- 변경일시
+    created_at TEXT DEFAULT (datetime('now'))  -- 변경일시
 );
 
 -- rule_condition_history 테이블: 규칙 조건 변경 이력
@@ -160,7 +150,7 @@ CREATE TABLE IF NOT EXISTS rule_condition_history (
     field_name TEXT NOT NULL,            -- 변경된 필드명 (target_status_id, operator 등)
     old_value TEXT,                      -- 변경 전 값
     new_value TEXT,                      -- 변경 후 값
-    created_at TEXT DEFAULT (datetime('now')),  -- 변경일시
+    created_at TEXT DEFAULT (datetime('now'))  -- 변경일시
 );
 
 -- rule_action_history 테이블: 규칙 액션 변경 이력
@@ -172,7 +162,7 @@ CREATE TABLE IF NOT EXISTS rule_action_history (
     field_name TEXT NOT NULL,            -- 변경된 필드명 (target_status_id 등)
     old_value TEXT,                      -- 변경 전 값
     new_value TEXT,                      -- 변경 후 값
-    created_at TEXT DEFAULT (datetime('now')),  -- 변경일시
+    created_at TEXT DEFAULT (datetime('now'))  -- 변경일시
 );
 
 -- error_logs 테이블: 시스템 에러 로그

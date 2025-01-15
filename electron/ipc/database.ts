@@ -1,10 +1,5 @@
 import { ipcMain } from "electron";
-import Database from "better-sqlite3";
-
-const db = new Database('stock.db', {
-    timeout: 5000,
-    verbose: console.log
-});
+import { db } from "../core/database";
 
 ipcMain.handle('db:insert', async ( _event, { table, data }) => {
     try {

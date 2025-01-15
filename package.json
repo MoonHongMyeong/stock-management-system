@@ -9,8 +9,8 @@
   "scripts": {
     "dev": "vite",
     "build": "electron-builder build",
-    "electron:dev": "concurrently \"vite\" \"tsc -p tsconfig.json && electron-rebuild -f && electron dist/electron/main.js\"",
-    "electron:build": "vite build && electron-builder",
+    "electron:dev": "concurrently \"vite\" \"tsc -p tsconfig.json && cp -r electron/resources dist/electron && electron-rebuild -f && electron dist/electron/main.js\"",
+    "electron:build": "tsc -p tsconfig.json && cp -r electron/resources dist/electron && vite build && electron-builder",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "electron-forge start"
