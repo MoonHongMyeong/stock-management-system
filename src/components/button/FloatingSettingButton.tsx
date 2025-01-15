@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './floatingButton.css';
 
-const FloatingButton = () => {
+const FloatingSettingButton = () => {
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
 
@@ -43,4 +43,4 @@ const FloatingButton = () => {
   );
 };
 
-export default FloatingButton; 
+export default FloatingSettingButton;

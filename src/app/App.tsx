@@ -1,4 +1,4 @@
-import FloatingButton from '@/components/button/FloatingButton'
+import FloatingSettingButton from '@/components/button/FloatingSettingButton'
 import Header from '@/layout/Header'
 import Main from '@/layout/Main'
 import Manual from '@/pages/manual/Manual'
@@ -13,7 +13,7 @@ const Layout = () => {
       <Main>
         <Outlet />
       </Main>
-      <FloatingButton />
+      <FloatingSettingButton />
     </>
   )
 }
