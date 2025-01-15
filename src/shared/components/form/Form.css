@@ -1,5 +1,7 @@
 .form-container {
   padding: 0rem 1.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-title {
@@ -46,4 +48,29 @@
   outline: none;
   border-color: #4a90e2;
   box-shadow: 0 0 0 1px #4a90e2;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  padding: 1rem 0;
+}
+
+.form-buttons button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
 } 
+
+.form-buttons button.cancel {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.form-buttons button.save {
+  background-color: #4a90e2;
+  color: #fff;
+}
