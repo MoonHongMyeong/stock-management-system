@@ -1,5 +1,5 @@
 const Spacing = ({ width, height }: { width?: string, height?: string }) => {
-  return <div style={{ width, height }}></div>;
+  return <div className="spacing" style={{ width, height }}></div>;
 };
 
 export default Spacing;
