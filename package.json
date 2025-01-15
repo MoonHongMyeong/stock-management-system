@@ -2,24 +2,27 @@
   "name": "stock-management-system",
   "private": true,
   "version": "0.0.0",
-  "engines" : {
+  "engines": {
     "node": "18.20.5",
     "npm": "10.8.2"
   },
   "scripts": {
     "dev": "vite",
     "build": "electron-builder build",
-    "electron:dev": "concurrently \"vite\" \"tsc electron/main.ts && set NODE_ENV=development && electron electron/main.js\"",
+    "electron:dev": "concurrently \"vite\" \"tsc -p tsconfig.json && electron-rebuild -f && electron dist/electron/main.js\"",
     "electron:build": "vite build && electron-builder",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "electron-forge start"
   },
   "dependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "better-sqlite3": "^11.8.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@electron/rebuild": "^3.7.1",
     "@eslint/js": "^9.17.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",

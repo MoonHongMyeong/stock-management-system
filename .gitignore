@@ -54,3 +54,6 @@ Thumbs.db
 # Electron
 electron/main.js
 /release
+
+# Sqlite
+stock.db
