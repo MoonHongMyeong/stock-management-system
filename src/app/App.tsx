@@ -1,8 +1,8 @@
-import FloatingSettingButton from '@/components/button/FloatingSettingButton'
 import Header from '@/layout/Header'
 import Main from '@/layout/Main'
-import Manual from '@/pages/manual/Manual'
-import ErrorPage from '@/pages/error/ErrorPage'
+import ManualPage from '@/features/manual/Manual'
+import FloatingSettingButton from '@/shared/components/button/FloatingSettingButton'
+import ErrorPage from '@/features/error/ErrorPage'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import './App.css'
 
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Manual />
+        element: <ManualPage />
       }
     ]
   }
