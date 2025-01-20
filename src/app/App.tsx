@@ -1,11 +1,11 @@
+import ErrorPage from '@/features/error/ErrorPage'
+import ManualPage from '@/features/manual/Manual'
+import PlatformSettingPage from '@/platform/pages/PlatformSettingPage'
 import Header from '@/layout/Header'
 import Main from '@/layout/Main'
-import ManualPage from '@/features/manual/Manual'
 import FloatingSettingButton from '@/shared/components/button/FloatingSettingButton'
-import ErrorPage from '@/features/error/ErrorPage'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import './App.css'
-
 const Layout = () => {
   return (
     <>
@@ -27,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <ManualPage />
+      },
+      {
+        path: '/setting/platform',
+        element: <PlatformSettingPage />
       }
     ]
   }
