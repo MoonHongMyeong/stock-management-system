@@ -1,6 +1,6 @@
 import ErrorPage from '@/features/error/ErrorPage'
 import ManualPage from '@/features/manual/Manual'
-import PlatformSettingPage from '@/platform/pages/PlatformSettingPage'
+import PlatformSettingPage from '@/features/platform/pages/PlatformSettingPage'
 import Header from '@/layout/Header'
 import Main from '@/layout/Main'
 import FloatingSettingButton from '@/shared/components/button/FloatingSettingButton'

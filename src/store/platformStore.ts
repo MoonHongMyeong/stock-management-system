@@ -1,5 +1,5 @@
-import { PlatformService } from '@/platform/service/platformService';
-import { Platform } from '@/platform/types/platform';
+import { PlatformService } from '@/features/platform/service/platformService';
+import { Platform } from '@/features/platform/types/platform';
 import { create } from 'zustand';
 
 interface PlatformStore {
