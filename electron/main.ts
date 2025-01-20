@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import { initializeDatabase } from './core/database'
 import { createWindow } from './core/window'
+import './ipc/database'
 
 const isDevelopment = !app.isPackaged
 

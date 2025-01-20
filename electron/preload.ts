@@ -6,5 +6,6 @@ contextBridge.exposeInMainWorld('electron', {
         select: (params: any) => ipcRenderer.invoke('db:select', params),
         update: (params: any) => ipcRenderer.invoke('db:update', params),
         delete: (params: any) => ipcRenderer.invoke('db:delete', params),
+        transaction: (params: any) => ipcRenderer.invoke('db:transaction', params),
     }
 });
