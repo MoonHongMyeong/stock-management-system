@@ -51,6 +51,8 @@
   color: #495057;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-wrap: balance;
+  text-align: center;
 }
 
 .table td {
