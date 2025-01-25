@@ -1,4 +1,4 @@
-import { Platform } from '@/platform/types/platform';
+import { Platform } from '@/features/platform/types/platform';
 
 export const PlatformService = {
     async getAll(): Promise<Platform[]> {
