@@ -25,16 +25,29 @@ const FloatingSettingButton = () => {
         <div className="floating-menu">
           <ul>
             <li>
-              <button onClick={() => handleNavigate('/setting/platform')}>메뉴(플랫폼) 설정</button>
+              <button onClick={() => handleNavigate('/setting/platform')}>
+                플랫폼 정의
+              </button>
             </li>
             <li>
-              <button onClick={() => handleNavigate('/setting/product')}>상품 설정</button>
+              <button onClick={() => handleNavigate('/setting/logistics')}>
+                물류 프로세스 정의
+              </button>
             </li>
             <li>
-              <button onClick={() => handleNavigate('/setting/target')}>대상/상태 설정</button>
+              <button onClick={() => handleNavigate('/setting/product/link')}>
+                상품 연결 관리
+              </button>
             </li>
             <li>
-              <button onClick={() => handleNavigate('/setting/rule')}>규칙 설정</button>
+              <button onClick={() => handleNavigate('/setting/product/field')}>
+                상품 필드 정의
+              </button>
+            </li>
+            <li>
+              <button onClick={() => handleNavigate('/setting/rule')}>
+                상태 변경 규칙 정의
+              </button>
             </li>
           </ul>
         </div>
