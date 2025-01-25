@@ -12,30 +12,19 @@ CREATE TABLE IF NOT EXISTS platforms (
     updated_at TEXT DEFAULT (datetime('now'))   -- 수정일시
 );
 
--- targets 테이블: 대상
-CREATE TABLE IF NOT EXISTS targets (
-    id INTEGER PRIMARY KEY,               -- 대상 그룹 고유 식별자
-    code TEXT NOT NULL UNIQUE,            -- 그룹 코드 (예: DELIVERY, PAYMENT)
-    name TEXT NOT NULL,                   -- 그룹 이름 (예: 배송, 결제)
-    description TEXT,                     -- 그룹 설명
+-- logistics_definitions 테이블: 물류 정의
+CREATE TABLE IF NOT EXISTS logistics (
+    id INTEGER PRIMARY KEY,               
+    code TEXT NOT NULL UNIQUE,            -- 코드 (PRODUCTION, PRODUCTION_READY...)
+    name TEXT NOT NULL,                   -- 이름 (제작, 제작준비중...)
+    type TEXT NOT NULL,                   -- 타입 (POINT: 제작/배송, STATUS: 준비중/완료)
+    parent_id INTEGER,                    -- 상태인 경우 소속된 물류 단계 ID
+    description TEXT,                     -- 설명
     sort_order INTEGER DEFAULT 0,         -- 정렬 순서
     is_active INTEGER DEFAULT 1,          -- 활성화 여부
-    created_at TEXT DEFAULT (datetime('now')),  -- 생성일시
-    updated_at TEXT DEFAULT (datetime('now'))   -- 수정일시
-);
-
--- target_status 테이블: 대상 상태 코드 관리
-CREATE TABLE IF NOT EXISTS target_status (
-    id INTEGER PRIMARY KEY,               -- 상태 코드 고유 식별자
-    target_id INTEGER NOT NULL,           -- 대상 ID
-    code TEXT NOT NULL UNIQUE,            -- 상태 코드 (예: DELIVERING, DELIVERED)
-    name TEXT NOT NULL,                   -- 상태 이름 (예: 배송중, 배송완료)
-    description TEXT,                     -- 상태 설명
-    sort_order INTEGER DEFAULT 0,         -- 정렬 순서
-    is_active INTEGER DEFAULT 1,          -- 활성화 여부
-    created_at TEXT DEFAULT (datetime('now')),  -- 생성일시
-    updated_at TEXT DEFAULT (datetime('now')),  -- 수정일시
-    FOREIGN KEY (target_id) REFERENCES targets(id)
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (parent_id) REFERENCES logistics_definitions(id)
 );
 
 -- products 테이블: 제품 기본 정보
@@ -44,10 +33,8 @@ CREATE TABLE IF NOT EXISTS products (
     platform_id INTEGER NOT NULL,         -- 플랫폼 ID
     code TEXT NOT NULL UNIQUE,            -- 제품 코드 (고유값)
     name TEXT NOT NULL,                   -- 제품 이름
-    status_code_id INTEGER NOT NULL,      -- 제품 상태 코드
     created_at TEXT DEFAULT (datetime('now')),  -- 생성일시
     updated_at TEXT DEFAULT (datetime('now')),  -- 수정일시
-    FOREIGN KEY (status_code_id) REFERENCES target_status(id),
     FOREIGN KEY (platform_id) REFERENCES platforms(id)
 );
 
@@ -95,30 +82,30 @@ CREATE TABLE IF NOT EXISTS rule_conditions (
     id INTEGER PRIMARY KEY,
     rule_id INTEGER NOT NULL,            -- 규칙 ID
     parent_condition_id INTEGER,         -- 상위 조건 ID (중첩 조건용)
-    target_id INTEGER NOT NULL,          -- 대상 ID
-    target_status_id INTEGER NOT NULL,   -- 체크할 대상 상태 ID
+    logistics_point_id INTEGER NOT NULL, -- 대상 ID
+    logistics_status_id INTEGER NOT NULL,-- 체크할 대상 상태 ID
     operator TEXT NOT NULL,              -- 조건 연산자 (AND, OR, NOT)
     sort_order INTEGER DEFAULT 0,        -- 조건 실행 순서
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now')),
     FOREIGN KEY (rule_id) REFERENCES rules(id),
     FOREIGN KEY (parent_condition_id) REFERENCES rule_conditions(id),
-    FOREIGN KEY (target_id) REFERENCES targets(id),
-    FOREIGN KEY (target_status_id) REFERENCES target_status(id)
+    FOREIGN KEY (logistics_point_id) REFERENCES logistics_definitions(id),
+    FOREIGN KEY (logistics_status_id) REFERENCES logistics_definitions(id)
 );
 
 -- rule_actions 테이블: conditions 만족 시 상태 변경 정보
 CREATE TABLE IF NOT EXISTS rule_actions (
     id INTEGER PRIMARY KEY,
     rule_id INTEGER NOT NULL,
-    target_id INTEGER NOT NULL,          -- 대상 ID
-    target_status_id INTEGER NOT NULL,   -- 변경할 대상 상태
+    logistics_point_id INTEGER NOT NULL,    -- 대상 ID
+    logistics_status_id INTEGER NOT NULL,   -- 변경할 대상 상태
     sort_order INTEGER DEFAULT 0,        -- 액션 실행 순서
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now')),
     FOREIGN KEY (rule_id) REFERENCES rules(id),
-    FOREIGN KEY (target_id) REFERENCES targets(id),
-    FOREIGN KEY (target_status_id) REFERENCES target_status(id)
+    FOREIGN KEY (logistics_point_id) REFERENCES logistics_definitions(id),
+    FOREIGN KEY (logistics_status_id) REFERENCES logistics_definitions(id)
 );
 
 -- product_history 테이블: 제품 필드 값 변경 이력
