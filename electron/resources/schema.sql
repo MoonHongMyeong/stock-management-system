@@ -13,9 +13,10 @@ CREATE TABLE IF NOT EXISTS platforms (
 );
 
 -- logistics_definitions 테이블: 물류 정의
-CREATE TABLE IF NOT EXISTS logistics (
+CREATE TABLE IF NOT EXISTS logistics_definitions (
     id INTEGER PRIMARY KEY,               
-    code TEXT NOT NULL UNIQUE,            -- 코드 (PRODUCTION, PRODUCTION_READY...)
+    platform_id INTEGER NOT NULL,         -- 플랫폼 ID
+    code TEXT NOT NULL,                   -- 코드 (PRODUCTION, PRODUCTION_READY...)
     name TEXT NOT NULL,                   -- 이름 (제작, 제작준비중...)
     type TEXT NOT NULL,                   -- 타입 (POINT: 제작/배송, STATUS: 준비중/완료)
     parent_id INTEGER,                    -- 상태인 경우 소속된 물류 단계 ID
@@ -24,7 +25,9 @@ CREATE TABLE IF NOT EXISTS logistics (
     is_active INTEGER DEFAULT 1,          -- 활성화 여부
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now')),
-    FOREIGN KEY (parent_id) REFERENCES logistics_definitions(id)
+    FOREIGN KEY (platform_id) REFERENCES platforms(id),
+    FOREIGN KEY (parent_id) REFERENCES logistics_definitions(id),
+    UNIQUE(platform_id, code)            -- 플랫폼 내에서 코드는 유니크해야 함
 );
 
 -- products 테이블: 제품 기본 정보
