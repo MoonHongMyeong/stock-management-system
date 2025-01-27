@@ -1,4 +1,5 @@
 import ErrorPage from '@/features/error/ErrorPage'
+import LogisticsSettingPage from '@/features/logistics/pages/LogisticsSettingPage'
 import ManualPage from '@/features/manual/Manual'
 import PlatformSettingPage from '@/features/platform/pages/PlatformSettingPage'
 import Header from '@/layout/Header'
@@ -6,6 +7,7 @@ import Main from '@/layout/Main'
 import FloatingSettingButton from '@/shared/components/button/FloatingSettingButton'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import './App.css'
+
 const Layout = () => {
   return (
     <>
@@ -31,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: '/setting/platform',
         element: <PlatformSettingPage />
+      },
+      {
+        path: '/setting/logistics',
+        element: <LogisticsSettingPage />
       }
     ]
   }
