@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, useState } from 'react';
+import { ButtonHTMLAttributes } from 'react';
 import './button.css';
 
 // DeleteButton
@@ -36,22 +36,19 @@ export const DeleteButton = ({ onClick, disabled = false, ...props }: DeleteButt
 
 // ToggleButton
 interface ToggleButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  initialState?: boolean;
+  isActive?: boolean;
   onToggle?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
 }
 
 export const ToggleButton = ({ 
-  initialState = false, 
+  isActive = false, 
   onToggle,
   disabled = false,
   ...props 
 }: ToggleButtonProps) => {
-  const [isActive, setIsActive] = useState(initialState);
-
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (disabled) return;
-    setIsActive(!isActive);
     onToggle?.(e);
   };
 

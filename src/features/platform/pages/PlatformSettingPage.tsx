@@ -193,7 +193,7 @@ const PlatformSettingPage = () => {
                                     className="button-cell"
                                 >
                                     <ToggleButton 
-                                        initialState={platform.isActive} 
+                                        isActive={platform.isActive} 
                                         onToggle={(e) => handleToggle(e, index)} 
                                     />
                                     <DeleteButton onClick={(e) => handleDelete(e, index)} />
