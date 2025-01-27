@@ -19,14 +19,14 @@ CREATE TABLE IF NOT EXISTS logistics_definitions (
     code TEXT NOT NULL,                   -- 코드 (PRODUCTION, PRODUCTION_READY...)
     name TEXT NOT NULL,                   -- 이름 (제작, 제작준비중...)
     type TEXT NOT NULL,                   -- 타입 (POINT: 제작/배송, STATUS: 준비중/완료)
-    parent_id INTEGER,                    -- 상태인 경우 소속된 물류 단계 ID
+    point_id INTEGER,                    -- 상태인 경우 소속된 물류 단계 ID
     description TEXT,                     -- 설명
     sort_order INTEGER DEFAULT 0,         -- 정렬 순서
     is_active INTEGER DEFAULT 1,          -- 활성화 여부
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now')),
     FOREIGN KEY (platform_id) REFERENCES platforms(id),
-    FOREIGN KEY (parent_id) REFERENCES logistics_definitions(id),
+    FOREIGN KEY (point_id) REFERENCES logistics_definitions(id),
     UNIQUE(platform_id, code)            -- 플랫폼 내에서 코드는 유니크해야 함
 );
 

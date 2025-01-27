@@ -12,7 +12,6 @@ DROP TABLE IF EXISTS product_field_values;
 DROP TABLE IF EXISTS product_fields;
 DROP TABLE IF EXISTS products;
 
-DROP TABLE IF EXISTS target_status;
-DROP TABLE IF EXISTS targets;
+DROP TABLE IF EXISTS logistics_definitions;
 
 DROP TABLE IF EXISTS platforms;
