@@ -2,7 +2,7 @@ import { Menu, MenuResponse } from '@/features/admin/types/Admin';
 import { toCamelCase } from '@/shared/utils/caseConverter';
 
 /**
- * 메뉴 조회 서비스
+ * 활성화 여부에 따라 메뉴 조회 서비스
  * @param isActive 메뉴 활성화 여부
  * @returns 메뉴 목록
  */
@@ -14,8 +14,25 @@ export const fetchMenus = async (isActive: boolean): Promise<Menu[]> => {
                     route, 
                     is_active 
                 FROM menus 
-                WHERE is_active = ?`,
+                WHERE is_active = ?
+                ORDER BY display_order ASC`,
         params: [isActive]
+    });
+    return result.success 
+        ? result.data.map((menu: MenuResponse) => toCamelCase<Menu>(menu))
+        : [];
+};
+
+/**
+ * 메뉴관리 페이지에서 사용할 메뉴 조회 서비스
+ * @returns 메뉴 목록
+ */
+export const getMenu = async (): Promise<Menu[] | null> => {
+    const result = await window.electron.db.query({
+        query: `SELECT * 
+                FROM menus
+                ORDER BY display_order ASC`,
+        params: []
     });
     return result.success 
         ? result.data.map((menu: MenuResponse) => toCamelCase<Menu>(menu))

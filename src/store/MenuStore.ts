@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { deleteMenu, fetchMenus, saveMenu, updateMenu } from '@/features/admin/services/AdminService';
+import { deleteMenu, fetchMenus, getMenu, saveMenu, updateMenu } from '@/features/admin/services/AdminService';
 import { Menu } from '@/features/admin/types/Admin';
+import { create } from 'zustand';
 
 interface MenuStore {
   /**
@@ -28,9 +28,13 @@ interface MenuStore {
    * @param id 삭제할 메뉴의 id
    */
   deleteMenu: (id: number) => Promise<void>;
+  /**
+   * 메뉴 조회
+   */
+  getMenu: () => Promise<void>;
 }
 
-export const menuStore = create<MenuStore>((set) => ({
+export const useMenuStore = create<MenuStore>((set) => ({
   menus: [],
   fetchMenus: async (isActive: boolean) => {
     const menus = await fetchMenus(isActive);
@@ -60,4 +64,8 @@ export const menuStore = create<MenuStore>((set) => ({
       }));
     }
   },
+  getMenu: async () => {
+    const menus = await getMenu();
+    set({ menus: menus ?? [] });
+  }
 }));
