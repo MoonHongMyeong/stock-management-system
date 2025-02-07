@@ -1,8 +1,10 @@
+import MenuManagementPage from '@/features/admin/pages/MenuManagementPage'
 import ManualPage from '@/features/manual/Manual'
+import SettingButton from '@/shared/components/common/button/SettingButton'
 import ErrorPage from '@/shared/components/error/ErrorPage'
 import Header from '@/shared/components/layout/Header'
 import Main from '@/shared/components/layout/Main'
-import SettingButton from '@/shared/components/common/button/SettingButton'
+import { ToastProvider } from '@/contexts/ToastContext'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import './App.css'
 
@@ -28,6 +30,10 @@ const router = createBrowserRouter([
         path: '/',
         element: <ManualPage />
       },
+      {
+        path: '/admin/menu',
+        element: <MenuManagementPage />
+      },
     ]
   }
 ], {
@@ -37,7 +43,11 @@ const router = createBrowserRouter([
 })
 
 function App() {
-  return <RouterProvider router={router} />
+  return (
+    <ToastProvider>
+      <RouterProvider router={router} />
+    </ToastProvider>
+  )
 }
 
 export default App
