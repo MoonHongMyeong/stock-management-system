@@ -30,3 +30,11 @@ export const toSnakeCase = <T extends object>(obj: Record<string, any>): T => {
     return snakeCaseObj as T;
 };
 
+/**
+ * 카멜 케이스 문자열 배열을 스네이크 케이스로 변환
+ * @param arr 변환할 문자열 배열
+ * @returns 변환된 문자열 배열
+ */
+export const toSnakeCaseArray = (arr: string[]): string[] => {
+    return arr.map(str => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`));
+};
