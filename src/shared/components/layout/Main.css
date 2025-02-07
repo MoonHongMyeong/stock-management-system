@@ -1,0 +1,4 @@
+main {
+    width: 100%;
+    height: calc(100vh - 5rem); /* 헤더 높이 3rem + padding 1rem */
+}

@@ -1,8 +1,8 @@
 import ManualPage from '@/features/manual/Manual'
 import ErrorPage from '@/shared/components/error/ErrorPage'
-import Header from '@/shared/components/header/Header'
-import MainLayout from '@/shared/components/mainLayout/MainLayout'
-import SettingButton from '@/shared/components/button/SettingButton'
+import Header from '@/shared/components/layout/Header'
+import Main from '@/shared/components/layout/Main'
+import SettingButton from '@/shared/components/common/button/SettingButton'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import './App.css'
 
@@ -10,9 +10,9 @@ const Layout = () => {
   return (
     <>
       <Header />
-      <MainLayout>
+      <Main>
         <Outlet />
-      </MainLayout>
+      </Main>
       <SettingButton />
     </>
   )

@@ -1,6 +1,6 @@
-import './MainLayout.css'
+import './Main.css'
 
-const MainLayout
+const Main
  = ({children}: {children: React.ReactNode}) => {
     return (
         <main>
@@ -9,4 +9,4 @@ const MainLayout
     )
 }   
 
-export default MainLayout;
+export default Main;

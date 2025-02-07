@@ -1,10 +1,10 @@
-.floating-button-container {
+.setting-button-container {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
 }
 
-.floating-button {
+.setting-button {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
@@ -18,15 +18,15 @@
   z-index: 100;
 }
 
-.floating-button:hover {
+.setting-button:hover {
   transform: scale(1.1);
 }
 
-.floating-button:active {
+.setting-button:active {
   transform: scale(0.95);
 }
 
-.floating-menu {
+.setting-menu {
   position: absolute;
   bottom: 3.5rem;
   right: 0;
@@ -37,13 +37,13 @@
   overflow: hidden;
 }
 
-.floating-menu ul {
+.setting-menu ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.floating-menu li button {
+.setting-menu li button {
   width: 100%;
   padding: 12px 16px;
   border: none;
@@ -53,6 +53,6 @@
   font-size: 14px;
 }
 
-.floating-menu li button:hover {
+.setting-menu li button:hover {
   background-color: #f5f5f5;
 }
