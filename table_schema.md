@@ -105,8 +105,8 @@ CREATE TABLE `product_option_values` (
     `product_option_id` INTEGER, -- 옵션 ID
     `value` TEXT, -- 옵션 값
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
-    UNIQUE (product_id, option_value_ids)  -- 같은 옵션 조합이 중복되지 않도록 설정
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
+    UNIQUE (`product_option_id`, `value`)  -- 같은 옵션 조합이 중복되지 않도록 설정
 );
 ```
 ✔ **각 옵션의 가능한 값 저장 (예: "블랙", "화이트", "M", "L")**

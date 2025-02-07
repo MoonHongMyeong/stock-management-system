@@ -10,14 +10,14 @@ CREATE TABLE menus (
 );
 
 -- 배송자
-CREATE TABLE `senders` (
+CREATE TABLE senders (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
     `company_name` TEXT NOT NULL,
     `company_phone` TEXT,
     `company_zipcode` TEXT,
     `company_address` TEXT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE (`company_name`, `company_phone`, `company_zipcode`, `company_address`)
 );
 
@@ -34,7 +34,7 @@ CREATE TABLE `orders` (
     `receiver_email` TEXT, -- 이메일
     `order_date` TIMESTAMP, -- 발주일
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE (`order_number`)  -- 주문번호는 유일해야 함
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE `order_products` (
     `order_products_number` TEXT NOT NULL, -- 품목별 주문번호
     `quantity` INTEGER, -- 주문 수량
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE (`order_id`, `order_products_number`) -- 주문 ID와 품목별 주문번호는 유일해야 함
     FOREIGN KEY (`order_id`) REFERENCES orders(id) ON DELETE CASCADE
 );
@@ -69,7 +69,7 @@ CREATE TABLE `shipments` (
     `receiver_phone` TEXT, -- 연락처
     `receiver_email` TEXT, -- 이메일
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE (`tracking_number`, `order_id`, `order_products_id`)  -- 송장번호는 유일해야 함
     FOREIGN KEY (`order_id`) REFERENCES orders(id) ON DELETE CASCADE
 );
@@ -81,7 +81,7 @@ CREATE TABLE `warehouses` (
     `address` TEXT, -- 창고 위치
     `contact` TEXT, -- 연락처등 추가로 필요한 것
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE(`name`, `address`)
 );
 
@@ -93,7 +93,7 @@ CREATE TABLE `inventory` (
     `order_id` INTEGER NULL, -- 주문 ID (없을 경우 NULL)
     `status_id` INTEGER, -- 정의한 상태
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     FOREIGN KEY (`order_id`) REFERENCES orders(id) ON DELETE CASCADE
 );
 
@@ -103,7 +103,7 @@ CREATE TABLE `products` (
     `name` TEXT, -- 제품명
     `description` TEXT, -- 제품 설명
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE(`name`)
 );
 
@@ -113,7 +113,7 @@ CREATE TABLE `product_options` (
     `product_id` INTEGER, -- 제품 ID
     `name` TEXT, -- 옵션명
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE (`product_id`, `name`)  -- 같은 제품에서 같은 옵션 이름이 중복되지 않도록 설정
 );
 
@@ -123,8 +123,8 @@ CREATE TABLE `product_option_values` (
     `product_option_id` INTEGER, -- 옵션 ID
     `value` TEXT, -- 옵션 값
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
-    UNIQUE (product_id, option_value_ids)  -- 같은 옵션 조합이 중복되지 않도록 설정
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
+    UNIQUE (`product_option_id`, `value`)  -- 같은 옵션 조합이 중복되지 않도록 설정
 );
 
 -- 상품 단위
@@ -133,7 +133,7 @@ CREATE TABLE `product_units` (
     `product_id` INTEGER, -- 제품 ID
     `option_value_ids` TEXT, -- 옵션 값 ID 목록 (쉼표로 구분된 값)
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE(`product_id`, `option_value_ids`) -- 동일한 옵션이 생성되지 않도록
 );
 
@@ -159,7 +159,7 @@ CREATE TABLE `purchase_orders` (
     `start_date` TIMESTAMP, -- 발주 시작일
     `expected_date` TIMESTAMP, -- 발주 예상 도착일
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE (`product_unit_id`, `supplier_id`)  -- 동일한 제품이 같은 공급자에게 중복 발주되지 않도록 설정
 );
 
@@ -167,7 +167,9 @@ CREATE TABLE `purchase_orders` (
 CREATE TABLE `rules` (
     `id` INTEGER PRIMARY KEY, -- 규칙 ID
     `name` TEXT, -- 규칙명
-    `description` TEXT -- 규칙 설명
+    `description` TEXT, -- 규칙 설명
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE (`name`)  -- 규칙명은 유일해야 함
 );
 
@@ -180,7 +182,7 @@ CREATE TABLE `rule_conditions` (
     `field_type` TEXT, -- 조건을 확인할 필드 타입
     `value` TEXT, -- 조건 값
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE (`rule_id`, `entity`, `field`, `value`)  -- 같은 규칙에서 동일한 조건이 중복되지 않도록 설정
 );
 
@@ -193,7 +195,7 @@ CREATE TABLE `rule_actions` (
     `field_type` TEXT, -- 변경할 필드 타입
     `new_value` TEXT, -- 변경할 값
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE (`rule_id`, `entity`, `field`, `new_value`)  -- 같은 규칙에서 동일한 액션이 중복되지 않도록 설정
 );
 
