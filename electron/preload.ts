@@ -1,11 +1,9 @@
 import { contextBridge, ipcRenderer } from 'electron';
+import { QueryRequest, TransactionRequest } from './type/query';
 
 contextBridge.exposeInMainWorld('electron', {
     db: {
-        insert: (params: any) => ipcRenderer.invoke('db:insert', params),
-        select: (params: any) => ipcRenderer.invoke('db:select', params),
-        update: (params: any) => ipcRenderer.invoke('db:update', params),
-        delete: (params: any) => ipcRenderer.invoke('db:delete', params),
-        transaction: (params: any) => ipcRenderer.invoke('db:transaction', params),
+        query: (params: QueryRequest) => ipcRenderer.invoke('db:query', params),
+        transaction: (params: TransactionRequest) => ipcRenderer.invoke('db:transaction', params),
     }
 });

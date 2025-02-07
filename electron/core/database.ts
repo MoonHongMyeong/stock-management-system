@@ -7,24 +7,10 @@ export const db = new Database('stock.db', {
     verbose: console.log
 });
 
-export const initializeDatabase = (isDevelopment: boolean) => {
+export const initializeDatabase = () => {
     try {
         const schema = fs.readFileSync(path.join(__dirname, '..', 'resources', 'schema.sql'), 'utf8');
         
-        if (isDevelopment) {
-            const dropSchema = fs.readFileSync(path.join(__dirname, '..', 'resources', 'drop_table.sql'), 'utf8');
-            db.prepare('BEGIN').run();
-            try {
-                db.exec(dropSchema);
-                console.log("Drop schema executed successfully");
-                db.prepare('COMMIT').run();
-            } catch (error) {
-                db.prepare('ROLLBACK').run();
-                console.error("Error during drop schema:", error);
-                throw error;
-            }
-        }
-
         db.prepare('BEGIN').run();
         try {
             db.exec(schema);

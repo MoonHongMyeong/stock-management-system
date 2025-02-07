@@ -1,71 +1,73 @@
 import { ipcMain } from "electron";
 import { db } from "../core/database";
+import { QueryRequest, TransactionRequest, QueryResult, SqliteError } from "../type/query";
 
-ipcMain.handle('db:insert', async (_event, { table, data }) => {
+ipcMain.handle('db:query', async (_event, request: QueryRequest): Promise<QueryResult> => {
     try {
-        const fields = Object.keys(data);
-        const values = Object.values(data);
-        const query = `INSERT INTO ${table} (${fields.join(',')}) VALUES (${values.map(() => '?').join(',')})`;
-        
-        // 트랜잭션 시작
-        const transaction = db.transaction(() => {
-            const stmt = db.prepare(query);
-            const result = stmt.run(...values);
-            return result.lastInsertRowid;
-        });
+        const stmt = db.prepare(request.query);
 
-        const lastInsertRowid = transaction();
-        
-        return { 
-            success: true, 
-            message: 'Data inserted successfully',
-            lastInsertRowid 
+        if(request.query.trim().startsWith('SELECT')) {
+            return {
+                success: true,
+                data: stmt.all(request.params)
+            };
+        }
+
+        const result = stmt.run(request.params);
+
+        return {
+            success: true,
+            changes: result.changes,
+            lastInsertRowId: Number(result.lastInsertRowid)
         };
     } catch (e) {
-        console.error('db:insert Error', e);
-        throw e;
+        const error = e as SqliteError;
+        console.error('db:query error', error);
+
+        let userMessage: string | undefined;
+
+        if (error.message.includes('UNIQUE constraint failed')) {
+            userMessage = '이미 존재하는 데이터입니다.';
+        } else if (error.message.includes('NOT NULL constraint failed')) {
+            userMessage = '필수 입력 항목이 누락되었습니다.';
+        } else if (error.message.includes('FOREIGN KEY constraint failed')) {
+            userMessage = '참조하는 데이터가 존재하지 않습니다.';
+        }else if (error.message.includes('SQLITE_BUSY')) {
+            userMessage = '다른 작업이 진행 중입니다. 잠시 후 다시 시도해주세요.';
+        }
+
+        return {
+            success: false,
+            error: {
+                code: error.code,
+                message: error.message,
+                userMessage: userMessage
+            }
+        }
+    } 
+});
+
+ipcMain.handle('db:transaction', async (_event, { queries }) => {
+    try {
+        const transaction = db.transaction((queries) => {
+            for (const { query, params } of queries) {
+                db.prepare(query).run(params);
+            }
+        });
+
+        transaction(queries);
+        return { success: true };
+        
+    } catch (e) {
+        const error = e as SqliteError;
+        console.error('Transaction error:', error);
+        return {
+            success: false,
+            error: {
+                message: error.message,
+                userMessage: '작업 처리 중 오류가 발생했습니다.'
+            }
+        };
     }
 });
 
-ipcMain.handle('db:select', async (_event, { table, columns, where, orderBy }) => {
-    try {
-        const query = `
-            SELECT ${columns.join(',')} 
-            FROM ${table} 
-            ${where ? `WHERE ${where}` : ''}
-            ${orderBy ? `ORDER BY ${orderBy}` : ''}
-        `;
-        const stmt = db.prepare(query);
-        return stmt.all();
-    } catch (e) {
-        console.error('db:select Error', e);
-        throw e;
-    }
-}); 
-
-ipcMain.handle('db:update', async ( _event, { table, data, where }) => {
-    try {
-        const fields = Object.keys(data);
-        const values = Object.values(data);
-        const query = `UPDATE ${table} SET ${fields.map((field, index) => `${field} = ?`).join(',')} ${where ? `WHERE ${where}` : ''}`;
-        const stmt = db.prepare(query);
-        stmt.run(...values);
-        return { success: true, message: 'Data updated successfully' };
-    } catch (e) {
-        console.error('db:update Error', e);
-        throw e;
-    }
-});
-
-ipcMain.handle('db:delete', async ( _event, { table, where }) => {
-    try {
-        const query = `DELETE FROM ${table} ${where ? `WHERE ${where}` : ''}`;
-        const stmt = db.prepare(query);
-        stmt.run();
-        return { success: true, message: 'Data deleted successfully' };
-
-    } catch (e) {
-        console.error('db:delete Error', e);
-        throw e;
-    }
-});

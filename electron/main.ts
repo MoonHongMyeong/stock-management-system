@@ -7,7 +7,7 @@ const isDevelopment = !app.isPackaged
 
 app.whenReady()
 .then(() => {
-    initializeDatabase(isDevelopment)
+    initializeDatabase()
     createWindow(isDevelopment)
 })
 

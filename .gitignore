@@ -57,3 +57,6 @@ electron/main.js
 
 # Sqlite
 stock.db
+
+# sample data
+/sample

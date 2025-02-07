@@ -23,6 +23,10 @@
   background-color: #3b82f6;
 }
 
+.toast-warn {
+  background-color: #f59e0b;
+}
+
 @keyframes slideUp {
   from {
     transform: translate(-50%, 100%);
