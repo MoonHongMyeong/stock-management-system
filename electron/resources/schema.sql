@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS menus (
     `name` TEXT NOT NULL, -- 메뉴 이름
     `route` TEXT,  -- 메뉴 URL 또는 경로
     `is_active` BOOLEAN DEFAULT TRUE,  -- 메뉴 활성화 여부
+    `display_order` INTEGER DEFAULT 0, -- 메뉴 순서
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 생성일
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 수정일
     UNIQUE(`name`, `route`)
