@@ -5,8 +5,8 @@
 ```sql
 CREATE TABLE menus (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-    `name` TEXT NOT NULL,              -- 메뉴 이름
-    `route` TEXT,                        -- 메뉴 URL 또는 경로
+    `name` TEXT NOT NULL, -- 메뉴 이름
+    `route` TEXT,  -- 메뉴 URL 또는 경로
     `is_active` BOOLEAN DEFAULT TRUE,  -- 메뉴 활성화 여부
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 생성일
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 수정일
@@ -57,13 +57,13 @@ CREATE TABLE `warehouses` (
 ```sql
 CREATE TABLE `inventory` (
     `id` INTEGER PRIMARY KEY, -- 재고 ID
-    `product_unit_id` INTEGER, -- 제품 단위 ID
+    `product_unit_id` INTEGER NOT NULL, -- 제품 단위 ID
     `warehouse_id` INTEGER, -- 창고 ID
     `order_id` INTEGER NULL, -- 주문 ID (없을 경우 NULL)
     `status_id` INTEGER, -- 정의한 상태
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
-    FOREIGN KEY (`order_id`) REFERENCES orders(id) ON DELETE SET NULL
+    FOREIGN KEY (`order_id`) REFERENCES orders(id) ON DELETE CASCADE
 );
 ```
 ✔ **주문 및 발주와 연계된 재고 관리**
@@ -76,7 +76,7 @@ CREATE TABLE `inventory` (
 ```sql
 CREATE TABLE `products` (
     `id` INTEGER PRIMARY KEY, -- 제품 ID
-    `name` TEXT NOT NULL, -- 제품명
+    `name` TEXT, -- 제품명
     `description` TEXT, -- 제품 설명
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
@@ -90,7 +90,7 @@ CREATE TABLE `products` (
 CREATE TABLE `product_options` (
     `id` INTEGER PRIMARY KEY, -- 옵션 ID
     `product_id` INTEGER, -- 제품 ID
-    `name` TEXT NOT NULL, -- 옵션명
+    `name` TEXT, -- 옵션명
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
     UNIQUE (`product_id`, `name`)  -- 같은 제품에서 같은 옵션 이름이 중복되지 않도록 설정
@@ -103,7 +103,7 @@ CREATE TABLE `product_options` (
 CREATE TABLE `product_option_values` (
     `id` INTEGER PRIMARY KEY, -- 옵션 값 ID
     `product_option_id` INTEGER, -- 옵션 ID
-    `value` TEXT NOT NULL, -- 옵션 값
+    `value` TEXT, -- 옵션 값
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
     UNIQUE (product_id, option_value_ids)  -- 같은 옵션 조합이 중복되지 않도록 설정
@@ -116,7 +116,7 @@ CREATE TABLE `product_option_values` (
 CREATE TABLE `product_units` (
     `id` INTEGER PRIMARY KEY, -- 제품 단위 ID
     `product_id` INTEGER, -- 제품 ID
-    `option_value_ids` TEXT NOT NULL, -- 옵션 값 ID 목록 (쉼표로 구분된 값)
+    `option_value_ids` TEXT, -- 옵션 값 ID 목록 (쉼표로 구분된 값)
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
     UNIQUE(`product_id`, `option_value_ids`) -- 동일한 옵션이 생성되지 않도록
@@ -158,6 +158,7 @@ CREATE TABLE `order_products` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
     UNIQUE (`order_id`, `order_products_number`) -- 주문 ID와 품목별 주문번호는 유일해야 함
+    FOREIGN KEY (`order_id`) REFERENCES orders(id) ON DELETE CASCADE
 );
 ```
 
@@ -173,9 +174,16 @@ CREATE TABLE `shipments` (
     `expected_date` TIMESTAMP, -- 배송 예상 도착일
     `elapsed_days` INTEGER, -- 배송 경과일
     `shipped_at` TIMESTAMP, -- 배송 완료일
+    `receiver_name` TEXT, -- 수령인
+    `receiver_zipcode` TEXT, -- 우편번호
+    `receiver_address` TEXT, -- 배송지
+    `receiver_detail_address` TEXT, -- 상세주소
+    `receiver_phone` TEXT, -- 연락처
+    `receiver_email` TEXT, -- 이메일
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
     UNIQUE (`tracking_number`, `order_id`, `order_products_id`)  -- 송장번호는 유일해야 함
+    FOREIGN KEY (`order_id`) REFERENCES orders(id) ON DELETE CASCADE
 );
 ```
 ✔ **배송 상태 관리**
@@ -196,7 +204,6 @@ CREATE TABLE suppliers (
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
     UNIQUE (`product_name`, `supplier_name`)  -- 같은 상품이 같은 공급업체에서 중복되지 않도록 설정
 );
-
 ```
 ✔ **공급자 정보 저장**
 
@@ -207,7 +214,7 @@ CREATE TABLE `purchase_orders` (
     `product_unit_id` INTEGER, -- 제품 단위 ID
     `supplier_id` INTEGER, -- 공급자 ID
     `quantity` INTEGER, -- 발주 수량
-    `status` TEXT, -- '발주 요청', '입고 완료'
+    `status_id` INTEGER, -- 정의한 상태
     `start_date` TIMESTAMP, -- 발주 시작일
     `expected_date` TIMESTAMP, -- 발주 예상 도착일
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일

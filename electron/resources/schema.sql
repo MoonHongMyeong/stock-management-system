@@ -62,6 +62,12 @@ CREATE TABLE `shipments` (
     `expected_date` TIMESTAMP, -- 배송 예상 도착일
     `elapsed_days` INTEGER, -- 배송 경과일
     `shipped_at` TIMESTAMP, -- 배송 완료일
+    `receiver_name` TEXT, -- 수령인
+    `receiver_zipcode` TEXT, -- 우편번호
+    `receiver_address` TEXT, -- 배송지
+    `receiver_detail_address` TEXT, -- 상세주소
+    `receiver_phone` TEXT, -- 연락처
+    `receiver_email` TEXT, -- 이메일
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 수정일
     UNIQUE (`tracking_number`, `order_id`, `order_products_id`)  -- 송장번호는 유일해야 함
@@ -149,7 +155,7 @@ CREATE TABLE `purchase_orders` (
     `product_unit_id` INTEGER, -- 제품 단위 ID
     `supplier_id` INTEGER, -- 공급자 ID
     `quantity` INTEGER, -- 발주 수량
-    `status` TEXT, -- '발주 요청', '입고 완료'
+    `status_id` INTEGER, -- 정의한 상태
     `start_date` TIMESTAMP, -- 발주 시작일
     `expected_date` TIMESTAMP, -- 발주 예상 도착일
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
