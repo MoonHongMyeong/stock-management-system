@@ -1,5 +1,5 @@
 -- 메뉴
-CREATE TABLE menus (
+CREATE TABLE IF NOT EXISTS menus (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
     `name` TEXT NOT NULL, -- 메뉴 이름
     `route` TEXT,  -- 메뉴 URL 또는 경로
@@ -10,7 +10,7 @@ CREATE TABLE menus (
 );
 
 -- 배송자
-CREATE TABLE senders (
+CREATE TABLE IF NOT EXISTS senders (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
     `company_name` TEXT NOT NULL,
     `company_phone` TEXT,
@@ -22,7 +22,7 @@ CREATE TABLE senders (
 );
 
 -- 주문
-CREATE TABLE `orders` (
+CREATE TABLE IF NOT EXISTS `orders` (
     `id` INTEGER PRIMARY KEY, -- 주문 ID
     `order_number` TEXT NOT NULL, -- 주문번호
     `status_id` INTEGER, -- 정의한 상태
@@ -39,7 +39,7 @@ CREATE TABLE `orders` (
 );
 
 -- 품목별 주문
-CREATE TABLE `order_products` (
+CREATE TABLE IF NOT EXISTS `order_products` (
     `id` INTEGER PRIMARY KEY, -- 주문 ID
     `order_id` INTEGER NOT NULL, -- 주문 ID
     `product_unit_id` INTEGER, -- 제품 단위 ID
@@ -52,7 +52,7 @@ CREATE TABLE `order_products` (
 );
 
 -- 배송
-CREATE TABLE `shipments` (
+CREATE TABLE IF NOT EXISTS `shipments` (
     `id` INTEGER PRIMARY KEY, -- 배송 ID
     `order_id` INTEGER NOT NULL, -- 주문 ID
     `order_products_id` INTEGER NOT NULL, -- 품목별 주문ID
@@ -75,7 +75,7 @@ CREATE TABLE `shipments` (
 );
 
 -- 창고
-CREATE TABLE `warehouses` (
+CREATE TABLE IF NOT EXISTS `warehouses` (
     `id` INTEGER PRIMARY KEY, -- 창고 ID
     `name` TEXT NOT NULL, -- 창고명
     `address` TEXT, -- 창고 위치
@@ -86,7 +86,7 @@ CREATE TABLE `warehouses` (
 );
 
 -- 재고
-CREATE TABLE `inventory` (
+CREATE TABLE IF NOT EXISTS `inventory` (
     `id` INTEGER PRIMARY KEY, -- 재고 ID
     `product_unit_id` INTEGER NOT NULL, -- 제품 단위 ID
     `warehouse_id` INTEGER, -- 창고 ID
@@ -98,7 +98,7 @@ CREATE TABLE `inventory` (
 );
 
 -- 상품
-CREATE TABLE `products` (
+CREATE TABLE IF NOT EXISTS `products` (
     `id` INTEGER PRIMARY KEY, -- 제품 ID
     `name` TEXT, -- 제품명
     `description` TEXT, -- 제품 설명
@@ -108,7 +108,7 @@ CREATE TABLE `products` (
 );
 
 -- 상품 필드
-CREATE TABLE `product_options` (
+CREATE TABLE IF NOT EXISTS `product_options` (
     `id` INTEGER PRIMARY KEY, -- 옵션 ID
     `product_id` INTEGER, -- 제품 ID
     `name` TEXT, -- 옵션명
@@ -118,7 +118,7 @@ CREATE TABLE `product_options` (
 );
 
 -- 상품 정보
-CREATE TABLE `product_option_values` (
+CREATE TABLE IF NOT EXISTS `product_option_values` (
     `id` INTEGER PRIMARY KEY, -- 옵션 값 ID
     `product_option_id` INTEGER, -- 옵션 ID
     `value` TEXT, -- 옵션 값
@@ -128,7 +128,7 @@ CREATE TABLE `product_option_values` (
 );
 
 -- 상품 단위
-CREATE TABLE `product_units` (
+CREATE TABLE IF NOT EXISTS `product_units` (
     `id` INTEGER PRIMARY KEY, -- 제품 단위 ID
     `product_id` INTEGER, -- 제품 ID
     `option_value_ids` TEXT, -- 옵션 값 ID 목록 (쉼표로 구분된 값)
@@ -138,7 +138,7 @@ CREATE TABLE `product_units` (
 );
 
 -- 공급자
-CREATE TABLE suppliers (
+CREATE TABLE IF NOT EXISTS suppliers (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
     `product_name` TEXT NOT NULL,  -- 발주할 상품명
     `product_url` TEXT,            -- 상품 구매 URL (선택)
@@ -150,7 +150,7 @@ CREATE TABLE suppliers (
 );
 
 -- 발주
-CREATE TABLE `purchase_orders` (
+CREATE TABLE IF NOT EXISTS `purchase_orders` (
     `id` INTEGER PRIMARY KEY, -- 발주 ID
     `product_unit_id` INTEGER, -- 제품 단위 ID
     `supplier_id` INTEGER, -- 공급자 ID
@@ -164,7 +164,7 @@ CREATE TABLE `purchase_orders` (
 );
 
 -- 규칙
-CREATE TABLE `rules` (
+CREATE TABLE IF NOT EXISTS `rules` (
     `id` INTEGER PRIMARY KEY, -- 규칙 ID
     `name` TEXT, -- 규칙명
     `description` TEXT, -- 규칙 설명
@@ -174,7 +174,7 @@ CREATE TABLE `rules` (
 );
 
 -- 규칙 조건
-CREATE TABLE `rule_conditions` (
+CREATE TABLE IF NOT EXISTS `rule_conditions` (
     `id` INTEGER PRIMARY KEY, -- 규칙 조건 ID
     `rule_id` INTEGER, -- 규칙 ID (연결)
     `entity` TEXT, -- 적용 대상 ('orders', 'inventory', 'shipments')
@@ -187,7 +187,7 @@ CREATE TABLE `rule_conditions` (
 );
 
 -- 규칙 실행
-CREATE TABLE `rule_actions` (
+CREATE TABLE IF NOT EXISTS `rule_actions` (
     `id` INTEGER PRIMARY KEY, -- 규칙 실행 ID
     `rule_id` INTEGER, -- 규칙 ID (연결)
     `entity` TEXT, -- 적용 대상 ('orders', 'inventory', 'shipments')
@@ -200,7 +200,7 @@ CREATE TABLE `rule_actions` (
 );
 
 -- 주문 이력
-CREATE TABLE `order_history` (
+CREATE TABLE IF NOT EXISTS `order_history` (
     `id` INTEGER PRIMARY KEY, -- 이력 ID
     `order_id` INTEGER, -- 주문 ID
     `previous_state` TEXT, -- 이전 상태
@@ -209,7 +209,7 @@ CREATE TABLE `order_history` (
 );
 
 -- 재고 이력
-CREATE TABLE `inventory_history` (
+CREATE TABLE IF NOT EXISTS `inventory_history` (
     `id` INTEGER PRIMARY KEY, -- 이력 ID
     `inventory_id` INTEGER, -- 재고 ID
     `order_id` INTEGER NULL, -- 주문 ID (없을 경우 NULL)
@@ -219,7 +219,7 @@ CREATE TABLE `inventory_history` (
 );
 
 -- 배송 이력
-CREATE TABLE `shipment_history` (
+CREATE TABLE IF NOT EXISTS `shipment_history` (
     `id` INTEGER PRIMARY KEY, -- 이력 ID
     `shipment_id` INTEGER, -- 배송 ID
     `previous_state` TEXT, -- 이전 상태
@@ -228,7 +228,7 @@ CREATE TABLE `shipment_history` (
 );
 
 -- 발주 이력
-CREATE TABLE `purchase_order_history` (
+CREATE TABLE IF NOT EXISTS `purchase_order_history` (
     `id` INTEGER PRIMARY KEY, -- 이력 ID
     `purchase_order_id` INTEGER, -- 발주 ID
     `previous_state` TEXT, -- 이전 상태
@@ -237,7 +237,7 @@ CREATE TABLE `purchase_order_history` (
 );
 
 -- 단계 - 상태
-CREATE TABLE step_status (
+CREATE TABLE IF NOT EXISTS step_status (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
     `step_type` TEXT NOT NULL,  -- 'order', 'inventory', 'shipment' 구분
     `status_name` TEXT NOT NULL,       -- 상태 이름 ('결제 완료', '배송 중', '입고 대기' 등)
