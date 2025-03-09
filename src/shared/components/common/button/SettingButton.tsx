@@ -25,12 +25,12 @@ const SettingButton  = () => {
         <div className="setting-menu">
           <ul>
             <li>
-              <button onClick={() => handleNavigate('/setting/company')}>
+              <button onClick={() => handleNavigate('/admin/company')}>
                 회사 정보 관리
               </button>
             </li>
             <li>
-              <button onClick={() => handleNavigate('/setting/menu')}>
+              <button onClick={() => handleNavigate('/admin/menu')}>
                 메뉴 관리
               </button>
             </li>

@@ -2,14 +2,24 @@ interface Menu {
     id: number;
     name: string;
     route: string;
-    isActive: boolean;
+    isActive: number;
+    displayOrder: number;
 }
 
 interface MenuResponse {
     id: number;
     name: string;
     route: string;
-    is_active: boolean;
+    is_active: number;
+    display_order: number;
 }
 
-export type { Menu, MenuResponse };
+interface MenuForm {
+    id?: number;
+    name: string;
+    route: string;
+    isActive: number;
+    displayOrder: number;
+}
+
+export type { Menu, MenuResponse, MenuForm };
