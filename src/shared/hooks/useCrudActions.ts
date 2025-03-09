@@ -3,7 +3,7 @@ import { toSnakeCaseArray } from "../utils/caseConverter";
 
 interface CrudOptions<T> {
     tableName: string;
-    onSuccess?: () => void;
+    onSuccess?: (type: 'insert' | 'update' | 'delete') => void;
     onError?: (error: string) => void;
     validate?: (data: T) => boolean | string; 
 }
@@ -45,7 +45,7 @@ export const useCrudActions = <T extends { id?: number }>({
                 } as DatabaseError;
             }
 
-            onSuccess?.();
+            onSuccess?.('insert');
         } catch (error) {
             if ((error as AppError).type === 'DATABASE_ERROR') {
                 const dbError = error as DatabaseError;
@@ -87,7 +87,7 @@ export const useCrudActions = <T extends { id?: number }>({
                 throw new Error(result.error?.message ?? '알 수 없는 오류');
             }
 
-            onSuccess?.();
+            onSuccess?.('update');
         } catch (error) {
             onError?.(error as string);
         }
@@ -105,7 +105,7 @@ export const useCrudActions = <T extends { id?: number }>({
                 throw new Error(result.error?.message ?? '알 수 없는 오류');
             }
 
-            onSuccess?.();
+            onSuccess?.('delete');
         } catch (error) {
             onError?.(error as string);
         }
